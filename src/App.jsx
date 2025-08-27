@@ -24,22 +24,41 @@ function Logo() {
 }
 
 function Form() {
+  const [description, setDescription] = useState("");
+  const [select , setSelect] = useState(1);
 
-  function handleSubmit() {
-    
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if(! description) return;
+    const newItem = { description, quantity: select, id: Date.now(), packed: false };
+    console.log(newItem);
+
+    setDescription("");
+    setSelect(1);
   }
 
   return (
+
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your trip?</h3>
 
-      <select>
-        {Array.from({length: 20} , (_ , i) => i + 1).map((num) => 
-          <option value={num} key={num}>{num}</option>
-        )}
+      <select value={select} onChange={(e) => setSelect(Number(e.target.value))}>
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          <option value={num} key={num}>
+            {num}
+          </option>
+        ))}
       </select>
-      <input placeholder="Item..."></input>
-      <button className="add" type="submit">ADD</button>
+      <input
+        type="text"
+        placeholder="Item..."
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      ></input>
+      <button className="add" type="submit">
+        ADD
+      </button>
     </form>
   );
 }
@@ -49,7 +68,7 @@ function PackingList() {
     <div className="list">
       <ul>
         {intialItems.map((item) => (
-          <Item item={item} key={item.id}/>
+          <Item item={item} key={item.id} />
         ))}
       </ul>
     </div>
